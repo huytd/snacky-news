@@ -4,14 +4,16 @@ import {
   sourcesToRawArticles,
   articlesWithinRange
 } from "./parser";
+import axios from "axios";
+const unfluff = require("../lib/node-unfluff/lib/unfluff");
 
 const CACHE_TIME = 60000;
 let last_cached: number = 0;
 
 const feed_vietnamese = [
   // Vietnamese
-  "https://vnexpress.net/rss/tin-moi-nhat.rss",
   "https://tuoitre.vn/rss/tin-moi-nhat.rss",
+  "https://vnexpress.net/rss/tin-moi-nhat.rss",
   "https://tinhte.vn/rss"
   /*
   "https://www.rfa.org/vietnamese/in_depth/rss2.xml",
@@ -107,10 +109,18 @@ Server.route("GET /", async (req: ServerRequest, res: ServerResponse) => {
   res.render("home", { articles: all, category: "everything" });
 });
 
+Server.route("GET /view", async (req: ServerRequest, res: ServerResponse) => {
+  const url = req.query.url;
+  console.log("QUERY ", url);
+  const r = await axios.get(url);
+  const parsed = unfluff(r.data);
+  res.render("view", { data: parsed });
+});
+
 Server.route(
   "GET /:category",
   async (req: ServerRequest, res: ServerResponse) => {
-    const category = req.params.category;
+    const category = req.query.category;
     const found = categories.find(cat => cat.name === category);
     if (found) {
       res.render("home", { articles: found.articles, category: category });

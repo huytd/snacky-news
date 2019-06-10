@@ -7,7 +7,7 @@ html
     link(href='https://hackcss.egoist.moe/hack.css' rel='stylesheet')
     style.
       html, body { background: #fafafa }
-      a { color: #43a047; border-color: #43a047; }
+      a { color: #43a047; border-color: #43a047; text-decoration: none; border: none; }
       a:hover { background: #43a047; }
   body.hack
     div.container
@@ -26,6 +26,6 @@ html
               div.avatarholder= index + 1
             div.media-body
               div.media-heading
-                a(href=article.url)= article.title
+                a(href= "/view?url=" + article.url)= article.title
               div.media-content= article.domain + " | " + article.pubDate
       hr

@@ -1,0 +1,31 @@
+html
+  head
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    title tamaño de bocado
+    link(href='https://hackcss.egoist.moe/hack.css' rel='stylesheet')
+    style.
+      html, body {
+        background: #fafafa;
+        font-family: 'Georgia', serif !important;
+        font-size: 16px;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+      a { color: #43a047; border-color: #43a047; }
+      a:hover { background: #43a047; }
+      img {
+        width: 100%;
+      }
+  body.hack
+    div.container
+      div(style="display: block; clear: both; padding: 10px;")
+        h1.title= data.title
+        div.image(style="padding: 10px 0; margin: 0 auto;")
+          img(src=data.image)
+        div.content !{data.text.replace(/\n/g, "<br/>")}
+        div(style="display: block; clear: both; padding: 10px;")
+        div.grid.-center.-between
+          a.btn.cell(href="javascript:history.back()")= "Back"
+          a.btn.cell(href= data.canonicalLink)= "Original Article"

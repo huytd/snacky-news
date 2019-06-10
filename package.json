@@ -4,9 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "@types/highland": "^2.12.2",
     "express": "^4.17.1",
-    "highland": "^2.13.4",
     "moment": "^2.24.0",
     "ncc": "^0.3.6",
     "pug": "^2.0.3",

@@ -120,7 +120,7 @@ Server.route("GET /view", async (req: ServerRequest, res: ServerResponse) => {
 Server.route(
   "GET /:category",
   async (req: ServerRequest, res: ServerResponse) => {
-    const category = req.query.category;
+    const category = req.params.category;
     const found = categories.find(cat => cat.name === category);
     if (found) {
       res.render("home", { articles: found.articles, category: category });

@@ -29477,7 +29477,7 @@ server_Server.route("GET /view", (req, res) => main_awaiter(undefined, void 0, v
     res.render("view", { data: parsed });
 }));
 server_Server.route("GET /:category", (req, res) => main_awaiter(undefined, void 0, void 0, function* () {
-    const category = req.query.category;
+    const category = req.params.category;
     const found = categories.find(cat => cat.name === category);
     if (found) {
         res.render("home", { articles: found.articles, category: category });

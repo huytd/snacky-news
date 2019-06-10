@@ -1,0 +1,31 @@
+html
+  head
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    title tamaño de bocado
+    link(href='https://hackcss.egoist.moe/hack.css' rel='stylesheet')
+    style.
+      html, body { background: #fafafa }
+      a { color: #fb8c00; border-color: #fb8c00; }
+      a:hover { background: #fb8c00; }
+  body.hack
+    div.container
+      div(style="display: block; clear: both; padding: 10px;")
+      div.grid.-left.-between
+        a(href="/", class={"btn-block": category == "everything", "btn-ghost": category != "everything"}).cell.btn.btn-warning= "#everything"
+        a(href="/vietnamese", class={"btn-block": category == "vietnamese", "btn-ghost": category != "vietnamese"}).cell.btn.btn-warning= "#vietnamese"
+        a(href="/financial", class={"btn-block": category == "financial", "btn-ghost": category != "financial"}).cell.btn.btn-warning= "#financial"
+        a(href="/technology", class={"btn-block": category == "technology", "btn-ghost": category != "technology"}).cell.btn.btn-warning= "#technology"
+        a(href="/other", class={"btn-block": category == "other", "btn-ghost": category != "other"}).cell.btn.btn-warning= "#other"
+      div(style="display: block; clear: both; padding: 10px;")
+      div.news-list
+        each article, index in articles
+          div.media
+            div.media-left
+              div.avatarholder= index + 1
+            div.media-body
+              div.media-heading
+                a(href=article.url)= article.title
+              div.media-content= article.domain + " | " + article.pubDate
+      hr

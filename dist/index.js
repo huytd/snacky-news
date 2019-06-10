@@ -13610,7 +13610,9 @@ const sourcesToRawArticles = (sources) => __awaiter(undefined, void 0, void 0, f
                 return {
                     title: item.title,
                     url: item.link,
-                    pubDate: moment(item.pubDate).format("LLL"),
+                    pubDate: moment(item.pubDate)
+                        .startOf("hour")
+                        .fromNow(),
                     isoDate: item.isoDate,
                     domain: item.link ? item.link.split("/")[2] : ""
                 };

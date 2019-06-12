@@ -29381,15 +29381,12 @@ let last_cached = 0;
 const feed_vietnamese = [
     // Vietnamese
     "https://tuoitre.vn/rss/tin-moi-nhat.rss",
-    "https://vnexpress.net/rss/tin-moi-nhat.rss",
-    "https://tinhte.vn/rss"
-    /*
+    "https://tinhte.vn/rss",
     "https://www.rfa.org/vietnamese/in_depth/rss2.xml",
     "https://www.voatiengviet.com/api/zkvypemovm",
     "https://www.voatiengviet.com/api/z$uyietpv_",
     "https://www.voatiengviet.com/api/zruyyeuivt",
     "https://www.voatiengviet.com/api/z_ty_erivy"
-    */
 ];
 const feed_economy = [
     // Investing, Economics and Financial

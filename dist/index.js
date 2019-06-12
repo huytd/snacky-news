@@ -29475,8 +29475,8 @@ server_Server.route("GET /", (req, res) => main_awaiter(undefined, void 0, void 
 }));
 server_Server.route("GET /view", (req, res) => main_awaiter(undefined, void 0, void 0, function* () {
     const url = req.query.url;
-    // for now, we don't support reader mode for reddit
-    if (url.indexOf("reddit.com/r/") !== -1)
+    // for now, we don't support reader mode for reddit and tinhte
+    if (url.match(/reddit.com|tinhte.vn/))
         res.redirect(url);
     console.log("QUERY ", url);
     const r = yield axios_default.a.get(url);

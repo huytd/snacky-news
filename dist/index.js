@@ -29358,6 +29358,14 @@ const sourcesToRawArticles = (sources) => __awaiter(undefined, void 0, void 0, f
 const articlesWithinRange = (articles, dateRange) => {
     return articles.filter((article) => dateWithinRange(article.isoDate, dateRange));
 };
+const sortArticlesByDate = (articles) => {
+    articles.sort((a, b) => {
+        const da = new Date(a.isoDate).getTime();
+        const db = new Date(b.isoDate).getTime();
+        return db - da;
+    });
+    return articles;
+};
 
 // EXTERNAL MODULE: ./node_modules/axios/index.js
 var axios = __webpack_require__(12);
@@ -29382,7 +29390,6 @@ const feed_vietnamese = [
     // Vietnamese
     "https://tuoitre.vn/rss/tin-moi-nhat.rss",
     "https://tinhte.vn/rss",
-    "https://www.rfa.org/vietnamese/in_depth/rss2.xml",
     "https://www.voatiengviet.com/api/zkvypemovm",
     "https://www.voatiengviet.com/api/z$uyietpv_",
     "https://www.voatiengviet.com/api/zruyyeuivt",
@@ -29446,7 +29453,7 @@ function fetchData() {
             const promises = categories.map((cat, i) => main_awaiter(this, void 0, void 0, function* () {
                 try {
                     const articles = yield sourcesToRawArticles(cat.sources);
-                    categories[i].articles = articlesWithinRange(articles, 2);
+                    categories[i].articles = sortArticlesByDate(articlesWithinRange(articles, 2));
                     return 1;
                 }
                 catch (_a) {

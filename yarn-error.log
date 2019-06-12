@@ -30,7 +30,7 @@ npm manifest:
     },
     "scripts": {
         "start": "ts-node src/main.ts",
-        "build": "ncc build src/main.ts && cp -r ./views ./dist/"
+        "build": "ncc build src/main.ts && cp -r ./views ./dist/ && cp -r lib/node-unfluff/data/ ./dist/data"
     }
   }
 

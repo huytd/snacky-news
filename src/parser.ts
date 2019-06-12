@@ -55,3 +55,12 @@ export const articlesWithinRange = (
     dateWithinRange(article.isoDate, dateRange)
   );
 };
+
+export const sortArticlesByDate = (articles: RawArticle[]): RawArticle[] => {
+  articles.sort((a, b) => {
+    const da: number = new Date(a.isoDate).getTime();
+    const db: number = new Date(b.isoDate).getTime();
+    return db - da;
+  });
+  return articles;
+};

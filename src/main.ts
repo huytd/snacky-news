@@ -2,7 +2,8 @@ import { ServerRequest, ServerResponse, Server } from "./server";
 import {
   RawArticle,
   sourcesToRawArticles,
-  articlesWithinRange
+  articlesWithinRange,
+  sortArticlesByDate
 } from "./parser";
 import axios from "axios";
 const unfluff = require("../lib/node-unfluff/lib/unfluff");
@@ -14,7 +15,6 @@ const feed_vietnamese = [
   // Vietnamese
   "https://tuoitre.vn/rss/tin-moi-nhat.rss",
   "https://tinhte.vn/rss",
-  "https://www.rfa.org/vietnamese/in_depth/rss2.xml",
   "https://www.voatiengviet.com/api/zkvypemovm",
   "https://www.voatiengviet.com/api/z$uyietpv_",
   "https://www.voatiengviet.com/api/zruyyeuivt",
@@ -82,7 +82,9 @@ async function fetchData(): Promise<void> {
     const promises = categories.map(async (cat, i) => {
       try {
         const articles = await sourcesToRawArticles(cat.sources);
-        categories[i].articles = articlesWithinRange(articles, 2);
+        categories[i].articles = sortArticlesByDate(
+          articlesWithinRange(articles, 2)
+        );
         return 1;
       } catch {
         return 0;

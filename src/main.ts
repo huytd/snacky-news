@@ -111,6 +111,8 @@ Server.route("GET /", async (req: ServerRequest, res: ServerResponse) => {
 
 Server.route("GET /view", async (req: ServerRequest, res: ServerResponse) => {
   const url = req.query.url;
+  // for now, we don't support reader mode for reddit
+  if (url.indexOf("reddit.com/r/") !== -1) res.redirect(url);
   console.log("QUERY ", url);
   const r = await axios.get(url);
   const parsed = unfluff(r.data);

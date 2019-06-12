@@ -29471,6 +29471,9 @@ server_Server.route("GET /", (req, res) => main_awaiter(undefined, void 0, void 
 }));
 server_Server.route("GET /view", (req, res) => main_awaiter(undefined, void 0, void 0, function* () {
     const url = req.query.url;
+    // for now, we don't support reader mode for reddit
+    if (url.indexOf("reddit.com/r/") !== -1)
+        res.redirect(url);
     console.log("QUERY ", url);
     const r = yield axios_default.a.get(url);
     const parsed = unfluff(r.data);

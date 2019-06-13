@@ -14,6 +14,6 @@
   },
   "scripts": {
       "start": "ts-node src/main.ts",
-      "build": "ncc build src/main.ts && cp -r ./views ./dist/ && cp -r lib/node-unfluff/data/ ./dist/data"
+      "build": "NODE_ENV=production ncc build src/main.ts && cp -r ./views ./dist/ && cp -r lib/node-unfluff/data/ ./dist/data"
   }
 }

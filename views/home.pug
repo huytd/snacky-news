@@ -23,9 +23,16 @@ html
         each article, index in articles
           div.media
             div.media-left
-              div.avatarholder= index + 1
+              if article.image
+                div.avatarholder(style="overflow: hidden")
+                  img(src= article.image, height="100%")
+              else
+                div.avatarholder= index + 1
             div.media-body
               div.media-heading
                 a(href= "/view?url=" + article.url)= article.title
-              div.media-content= article.domain + " | " + article.pubDate
+              div.media-content
+                if article.text
+                  div(style="padding: 2px 0 5px 0")= article.text
+                div(style="color: #888")= article.domain + " | " + article.pubDate
       hr

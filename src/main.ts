@@ -8,7 +8,9 @@ import {
 import axios from "axios";
 const unfluff = require("../lib/node-unfluff/lib/unfluff");
 
-const CACHE_TIME = 60000;
+// 30 min cache time for prod, 5 min for dev
+const CACHE_TIME =
+  process.env.NODE_ENV == "production" ? 30 * 60 * 1000 : 5 * 60 * 1000;
 let last_cached: number = 0;
 
 const feed_vietnamese = [
@@ -76,6 +78,34 @@ const categories = [
   }
 ];
 
+function fetchArticleDetails() {
+  console.log("FETCH ARTICLE DETAIL");
+  for (let i = 0; i < categories.length; i++) {
+    const category = categories[i];
+    Promise.all(
+      category.articles.map(async (article: RawArticle) => {
+        try {
+          const r = await axios.get(article.url);
+          const parsed = unfluff(r.data);
+          article.image = parsed.image;
+          const words = parsed.text.match(/(\w+[\s,\.\?\-]+){50}/);
+          const excerpt =
+            words && words.length
+              ? words[0]
+              : parsed.text
+                  .split("\n")
+                  .shift()
+                  .replace(/(\.|\s)$/, "");
+          article.text = excerpt.length ? excerpt + "..." : "";
+          console.log("DONE FETCH", article.url);
+        } catch (e) {
+          console.log("FETCHING", article.url, "FAILED");
+        }
+      })
+    );
+  }
+}
+
 async function fetchData(): Promise<void> {
   const current_time = Date.now();
   if (current_time - last_cached > CACHE_TIME) {
@@ -96,6 +126,7 @@ async function fetchData(): Promise<void> {
       last_cached = Date.now();
     }
   }
+  fetchArticleDetails();
 }
 
 Server.init();
@@ -131,7 +162,12 @@ Server.route(
   }
 );
 
-Server.start(() => {
-  fetchData();
-  setInterval(fetchData, CACHE_TIME);
-});
+Server.start(() => {});
+
+const asyncInterval = (fn: Function, interval: number): void => {
+  fn().then(() => {
+    setTimeout(() => asyncInterval(fn, interval), interval);
+  });
+};
+
+asyncInterval(fetchData, CACHE_TIME);

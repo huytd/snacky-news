@@ -29339,7 +29339,9 @@ const sourcesToRawArticles = (sources) => __awaiter(undefined, void 0, void 0, f
                         .startOf("hour")
                         .fromNow(),
                     isoDate: item.isoDate,
-                    domain: item.link ? item.link.split("/")[2] : ""
+                    domain: item.link ? item.link.split("/")[2] : "",
+                    image: "",
+                    text: ""
                 };
             });
         }
@@ -29384,7 +29386,8 @@ var main_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arg
 
 
 const unfluff = __webpack_require__(372);
-const CACHE_TIME = 60000;
+// 30 min cache time for prod, 5 min for dev
+const CACHE_TIME = process.env.NODE_ENV == "production" ? 30 * 60 * 1000 : 5 * 60 * 1000;
 let last_cached = 0;
 const feed_vietnamese = [
     // Vietnamese
@@ -29446,6 +29449,31 @@ const categories = [
         articles: []
     }
 ];
+function fetchArticleDetails() {
+    console.log("FETCH ARTICLE DETAIL");
+    for (let i = 0; i < categories.length; i++) {
+        const category = categories[i];
+        Promise.all(category.articles.map((article) => main_awaiter(this, void 0, void 0, function* () {
+            try {
+                const r = yield axios_default.a.get(article.url);
+                const parsed = unfluff(r.data);
+                article.image = parsed.image;
+                const words = parsed.text.match(/(\w+[\s,\.\?\-]+){50}/);
+                const excerpt = words && words.length
+                    ? words[0]
+                    : parsed.text
+                        .split("\n")
+                        .shift()
+                        .replace(/(\.|\s)$/, "");
+                article.text = excerpt.length ? excerpt + "..." : "";
+                console.log("DONE FETCH", article.url);
+            }
+            catch (e) {
+                console.log("FETCHING", article.url, "FAILED");
+            }
+        })));
+    }
+}
 function fetchData() {
     return main_awaiter(this, void 0, void 0, function* () {
         const current_time = Date.now();
@@ -29466,6 +29494,7 @@ function fetchData() {
                 last_cached = Date.now();
             }
         }
+        fetchArticleDetails();
     });
 }
 server_Server.init();
@@ -29493,10 +29522,13 @@ server_Server.route("GET /:category", (req, res) => main_awaiter(undefined, void
         res.redirect("/");
     }
 }));
-server_Server.start(() => {
-    fetchData();
-    setInterval(fetchData, CACHE_TIME);
-});
+server_Server.start(() => { });
+const asyncInterval = (fn, interval) => {
+    fn().then(() => {
+        setTimeout(() => asyncInterval(fn, interval), interval);
+    });
+};
+asyncInterval(fetchData, CACHE_TIME);
 
 
 /***/ }),

@@ -7,6 +7,8 @@ export interface RawArticle {
   domain: string;
   pubDate: string;
   isoDate: string;
+  image: string;
+  text: string;
 }
 
 const dateDiff = (a: any, b: any) => Math.floor((a - b) / 1000 / 86400);
@@ -32,7 +34,9 @@ export const sourcesToRawArticles = async (
             .startOf("hour")
             .fromNow(),
           isoDate: item.isoDate,
-          domain: item.link ? item.link.split("/")[2] : ""
+          domain: item.link ? item.link.split("/")[2] : "",
+          image: "",
+          text: ""
         };
       });
     } catch (e) {

@@ -29499,33 +29499,39 @@ function fetchData() {
 }
 server_Server.init();
 server_Server.route("GET /", (req, res) => main_awaiter(undefined, void 0, void 0, function* () {
-    const all = categories.reduce((result, cat) => result.concat(cat.articles), []);
-    res.render("home", { articles: all, category: "everything" });
+    setImmediate(() => {
+        const all = categories.reduce((result, cat) => result.concat(cat.articles), []);
+        res.render("home", { articles: all, category: "everything" });
+    });
 }));
 server_Server.route("GET /view", (req, res) => main_awaiter(undefined, void 0, void 0, function* () {
-    const url = req.query.url;
-    // for now, we don't support reader mode for reddit and tinhte
-    if (url.match(/reddit.com|tinhte.vn/))
-        res.redirect(url);
-    console.log("QUERY ", url);
-    const r = yield axios_default.a.get(url);
-    const parsed = unfluff(r.data);
-    res.render("view", { data: parsed });
+    setImmediate(() => main_awaiter(this, void 0, void 0, function* () {
+        const url = req.query.url;
+        // for now, we don't support reader mode for reddit and tinhte
+        if (url.match(/reddit.com|tinhte.vn/))
+            res.redirect(url);
+        console.log("QUERY ", url);
+        const r = yield axios_default.a.get(url);
+        const parsed = unfluff(r.data);
+        res.render("view", { data: parsed });
+    }));
 }));
 server_Server.route("GET /:category", (req, res) => main_awaiter(undefined, void 0, void 0, function* () {
-    const category = req.params.category;
-    const found = categories.find(cat => cat.name === category);
-    if (found) {
-        res.render("home", { articles: found.articles, category: category });
-    }
-    else {
-        res.redirect("/");
-    }
+    setImmediate(() => {
+        const category = req.params.category;
+        const found = categories.find(cat => cat.name === category);
+        if (found) {
+            res.render("home", { articles: found.articles, category: category });
+        }
+        else {
+            res.redirect("/");
+        }
+    });
 }));
 server_Server.start(() => { });
 const asyncInterval = (fn, interval) => {
     fn().then(() => {
-        setTimeout(() => asyncInterval(fn, interval), interval);
+        setTimeout(() => asyncInterval(fn, interval), CACHE_TIME);
     });
 };
 asyncInterval(fetchData, CACHE_TIME);

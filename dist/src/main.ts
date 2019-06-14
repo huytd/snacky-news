@@ -7,39 +7,33 @@ let categories = [];
 Server.init();
 
 Server.route("GET /", async (req: ServerRequest, res: ServerResponse) => {
-  setImmediate(() => {
-    const all = categories.reduce(
-      (result, cat) => result.concat(cat.articles),
-      []
-    );
-    res.render("home", { articles: all, category: "everything" });
-  });
+  const all = categories.reduce(
+    (result, cat) => result.concat(cat.articles),
+    []
+  );
+  res.render("home", { articles: all, category: "everything" });
 });
 
 Server.route("GET /view", async (req: ServerRequest, res: ServerResponse) => {
-  setImmediate(async () => {
-    const url = req.query.url;
-    // for now, we don't support reader mode for reddit and tinhte
-    if (url.match(/reddit.com|tinhte.vn/)) res.redirect(url);
-    console.log("QUERY ", url);
-    const r = await axios.get(url);
-    const parsed = unfluff(r.data);
-    res.render("view", { data: parsed });
-  });
+  const url = req.query.url;
+  // for now, we don't support reader mode for reddit and tinhte
+  if (url.match(/reddit.com|tinhte.vn/)) res.redirect(url);
+  console.log("QUERY ", url);
+  const r = await axios.get(url);
+  const parsed = unfluff(r.data);
+  res.render("view", { data: parsed });
 });
 
 Server.route(
   "GET /:category",
   async (req: ServerRequest, res: ServerResponse) => {
-    setImmediate(() => {
-      const category = req.params.category;
-      const found = categories.find(cat => cat.name === category);
-      if (found) {
-        res.render("home", { articles: found.articles, category: category });
-      } else {
-        res.redirect("/");
-      }
-    });
+    const category = req.params.category;
+    const found = categories.find(cat => cat.name === category);
+    if (found) {
+      res.render("home", { articles: found.articles, category: category });
+    } else {
+      res.redirect("/");
+    }
   }
 );
 
